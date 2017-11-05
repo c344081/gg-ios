@@ -31,6 +31,8 @@
 		8BE3D1741FAF085300474084 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1731FAF085300474084 /* UIView+Extension.swift */; };
 		8BE3D1761FAF146A00474084 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1751FAF146A00474084 /* UIImage+Extension.swift */; };
 		8BE3D1781FAF1EB200474084 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1771FAF1EB200474084 /* LoginViewController.swift */; };
+		8BE3D17A1FAF237400474084 /* NetworkingDefines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1791FAF237400474084 /* NetworkingDefines.swift */; };
+		8BE3D17C1FAF238900474084 /* APIProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D17B1FAF238900474084 /* APIProxy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +66,8 @@
 		8BE3D1731FAF085300474084 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8BE3D1751FAF146A00474084 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		8BE3D1771FAF1EB200474084 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		8BE3D1791FAF237400474084 /* NetworkingDefines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDefines.swift; sourceTree = "<group>"; };
+		8BE3D17B1FAF238900474084 /* APIProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProxy.swift; sourceTree = "<group>"; };
 		B0DF651395359958CF79DBB6 /* Pods_gg_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_gg_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -94,6 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				8B5636711FAE1B3D002094D7 /* GGRequest.swift */,
+				8BE3D1791FAF237400474084 /* NetworkingDefines.swift */,
+				8BE3D17B1FAF238900474084 /* APIProxy.swift */,
 			);
 			path = networking;
 			sourceTree = "<group>";
@@ -395,6 +401,7 @@
 			files = (
 				12F6E6841FA824150011CE03 /* GGTabBarController.swift in Sources */,
 				8B5636681FAE1B0C002094D7 /* Topic.swift in Sources */,
+				8BE3D17A1FAF237400474084 /* NetworkingDefines.swift in Sources */,
 				12EBB26E1FAD67A500858F75 /* GGFunctions.swift in Sources */,
 				12F6E6881FA8258D0011CE03 /* GGNavigationController.swift in Sources */,
 				8B5636701FAE1B2D002094D7 /* Post.swift in Sources */,
@@ -409,6 +416,7 @@
 				12F6E6991FA860EE0011CE03 /* GGDefines.swift in Sources */,
 				8BE3D1741FAF085300474084 /* UIView+Extension.swift in Sources */,
 				12F6E6581FA807820011CE03 /* AppDelegate.swift in Sources */,
+				8BE3D17C1FAF238900474084 /* APIProxy.swift in Sources */,
 				8B56366E1FAE1B0C002094D7 /* RegisterViewController.swift in Sources */,
 				8B5636671FAE1B0C002094D7 /* TopicTableViewCell.swift in Sources */,
 				8B56366A1FAE1B0C002094D7 /* HomeViewController.swift in Sources */,

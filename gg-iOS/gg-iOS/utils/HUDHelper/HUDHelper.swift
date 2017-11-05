@@ -91,21 +91,21 @@ class HUDHelper: MBProgressHUD {
     /// - Note: 不要与`showWithStatus`或`showInfoWithStatus`连用
     ///
     /// - Parameter status: 提示文字
-    public class func showInfoWithStatus(_ status: String) {
+    public class func showInfo(with status: String) {
         self.showImage(self.infoImage, with: status)
     }
     
     /// - Note: 不要与`showWithStatus`或`showInfoWithStatus`连用
     ///
     /// - Parameter status: 提示文字
-    public class func showSuccessWithStatus(_ status: String) {
+    public class func showSuccess(with status: String) {
         self.showImage(self.successImage, with: status)
     }
     
     /// - Note: 不要与`showWithStatus`或`showInfoWithStatus`连用
     ///
     /// - Parameter status: 提示文字
-    public class func showErrorWithStatus(_ status: String) {
+    public class func showError(with status: String) {
         self.showImage(self.errorImage, with: status)
     }
     

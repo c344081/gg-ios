@@ -7,7 +7,8 @@
 //
 
 import UIKit
+import Alamofire
 
-class GGRequest: NSObject {
-
+class GGRequest {
+    
 }

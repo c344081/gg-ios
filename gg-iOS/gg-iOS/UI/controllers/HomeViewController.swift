@@ -8,9 +8,12 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import Kanna
 
 class HomeViewController: UIViewController {
     
+    var tableView: UITableView!
     /// topic模型数组
     lazy var items = [Topic]()
     lazy var heightCache = NSCache<NSString, NSNumber>()
@@ -27,7 +30,7 @@ class HomeViewController: UIViewController {
     }
     
     func setupUI() {
-        let tableView = UITableView(frame: self.view.bounds, style: .plain)
+        tableView = UITableView(frame: self.view.bounds, style: .plain)
         self.view.addSubview(tableView)
         adjustContentInset(never: tableView, controller: self)
         tableView.contentInset = UIEdgeInsets(top: GGNaviBarMaxY, left: 0, bottom: GGTabBarH, right: 0)
@@ -44,67 +47,40 @@ class HomeViewController: UIViewController {
     }
     
     func loadData() {
-        var item = Topic()
-        item.title = "同志们，保利时代又堵路了，你们怎么看"
-        item.node = "water"
-        item.nodeName = "汤逊湖"
-        item.topicId = "26738"
-        item.userName = "dabaowuda"
-        item.avatar = "http://cdn.guanggoo.com/static/avatar/80/m_default.png"
-        item.lastTouchedTime = "4分钟前"
-        item.lastReplyUserName = "xieyang"
-        item.replyNum = 4
-        items.append(item)
-        
-        item = Topic()
-        item.title = "你最期待社区组织什么活动？"
-        item.node = "lowshine"
-        item.nodeName = "汤逊湖"
-        item.topicId = "25609"
-        item.userName = "ihuoxin"
-        item.avatar = "http://cdn.guanggoo.com/static/avatar/98/m_a82fbce6-9a2e-11e7-a0b7-00163e020f08.png"
-        item.lastTouchedTime = "11分钟前"
-        item.lastReplyUserName = "East_Lake"
-        item.replyNum = 37
-        items.append(item)
-        
-        item = Topic()
-        item.title = "尚德机构武汉研发中心招聘【大量最新职位发布】"
-        item.node = "job"
-        item.nodeName = "找工作"
-        item.topicId = "26727"
-        item.userName = "catnnna"
-        item.avatar = "http://cdn.guanggoo.com/static/avatar/59/m_default.png"
-        item.lastTouchedTime = "16分钟前"
-        item.lastReplyUserName = "zhhw_dev"
-        item.replyNum = 9
-        items.append(item)
-
-        item = Topic()
-        item.title = "新手父母如何给小孩买商业保险？"
-        item.node = "qna"
-        item.nodeName = "你问我答"
-        item.topicId = "26710"
-        item.userName = "eleven"
-        item.avatar = "http://cdn.guanggoo.com/static/avatar/7/m_e74ad505-5122-53e4-a042-9de9435d7419.png"
-        item.lastTouchedTime = "17分钟前"
-        item.lastReplyUserName = "kingfrng"
-        item.replyNum = 4
-        items.append(item)
-
-        item = Topic()
-        item.title = "年底想入手一台代步车，落地预算15万，求老司机建议"
-        item.node = "auto"
-        item.nodeName = "汽车"
-        item.topicId = "26675"
-        item.userName = "e211e"
-        item.avatar = "http://cdn.guanggoo.com/static/avatar/84/m_62c7ed54-c30c-11e5-a0b7-00163e020f08.png"
-        item.lastTouchedTime = "17分钟前"
-        item.lastReplyUserName = "zhhw_dev"
-        item.replyNum = 59
-        items.append(item)
-        
-        items.append(contentsOf: items)
+        Alamofire.request("http://www.guanggoo.com/").responseData { [unowned self] (response) in
+            switch response.result {
+            case .success:
+                if let data = response.data,
+                    let html = String(data: data, encoding: .utf8),
+                    let doc = HTML(html: html, encoding: .utf8) {
+                    let itemNodes = doc.xpath("//div[@class='topic-item']")
+                    for itemNode in itemNodes {
+                        let topic = Topic()
+                        topic.title = itemNode.xpath(".//*[@class='title']/a").first?.text
+                        let nodeDoc = itemNode.xpath(".//*[@class='node']/a").first
+                        topic.node = nodeDoc?["href"]?.replacingOccurrences(of: "/node/", with: "", options: .caseInsensitive)
+                        topic.nodeName = nodeDoc?.text
+                        let titleRef = itemNode.xpath(".//*[@class='title']/a").first?["href"]
+                        let idRange = titleRef?.range(of: "(?<=/)([\\d]*?)(?=#)", options: .regularExpression)
+                        if let idRange = idRange, let topicId = titleRef?[idRange] {
+                            topic.topicId = String(topicId)
+                        }
+                        topic.userName = itemNode.xpath(".//*[@class='username']/a").first?.text
+                        topic.avatar = itemNode.xpath(".//*[@class='avatar']").first?["src"]
+                        topic.lastTouchedTime = itemNode.xpath(".//*[@class='last-touched']").first?.text
+                        let lastReplyUserName = itemNode.xpath(".//*[@class='last-reply-username']/a").first?["href"]
+                        topic.lastReplyUserName = lastReplyUserName?.replacingOccurrences(of: "/u/", with: "", options: .caseInsensitive)
+                        topic.replyNum = Int(itemNode.xpath(".//*[@class='count']/a").first?.text ?? "0")
+                        
+                        self.items.append(topic)
+                    }
+                    
+                    self.tableView.reloadData()
+                }
+            case .failure:
+                HUDHelper.showError(with: response.error!.localizedDescription)
+            }
+        }
     }
 
 }
