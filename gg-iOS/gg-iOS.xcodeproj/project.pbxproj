@@ -23,7 +23,6 @@
 		8B5636681FAE1B0C002094D7 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B56365F1FAE1B0C002094D7 /* Topic.swift */; };
 		8B5636691FAE1B0C002094D7 /* DiscoveryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636611FAE1B0C002094D7 /* DiscoveryViewController.swift */; };
 		8B56366A1FAE1B0C002094D7 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636621FAE1B0C002094D7 /* HomeViewController.swift */; };
-		8B56366B1FAE1B0C002094D7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636631FAE1B0C002094D7 /* LoginViewController.swift */; };
 		8B56366C1FAE1B0C002094D7 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636641FAE1B0C002094D7 /* MessagesViewController.swift */; };
 		8B56366D1FAE1B0C002094D7 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636651FAE1B0C002094D7 /* MineViewController.swift */; };
 		8B56366E1FAE1B0C002094D7 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636661FAE1B0C002094D7 /* RegisterViewController.swift */; };
@@ -31,6 +30,7 @@
 		8B5636721FAE1B3D002094D7 /* GGRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5636711FAE1B3D002094D7 /* GGRequest.swift */; };
 		8BE3D1741FAF085300474084 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1731FAF085300474084 /* UIView+Extension.swift */; };
 		8BE3D1761FAF146A00474084 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1751FAF146A00474084 /* UIImage+Extension.swift */; };
+		8BE3D1781FAF1EB200474084 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE3D1771FAF1EB200474084 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +56,6 @@
 		8B56365F1FAE1B0C002094D7 /* Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		8B5636611FAE1B0C002094D7 /* DiscoveryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryViewController.swift; sourceTree = "<group>"; };
 		8B5636621FAE1B0C002094D7 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		8B5636631FAE1B0C002094D7 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8B5636641FAE1B0C002094D7 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		8B5636651FAE1B0C002094D7 /* MineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
 		8B5636661FAE1B0C002094D7 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -64,6 +63,7 @@
 		8B5636711FAE1B3D002094D7 /* GGRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGRequest.swift; sourceTree = "<group>"; };
 		8BE3D1731FAF085300474084 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8BE3D1751FAF146A00474084 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		8BE3D1771FAF1EB200474084 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B0DF651395359958CF79DBB6 /* Pods_gg_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_gg_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -218,7 +218,7 @@
 			children = (
 				8B5636611FAE1B0C002094D7 /* DiscoveryViewController.swift */,
 				8B5636621FAE1B0C002094D7 /* HomeViewController.swift */,
-				8B5636631FAE1B0C002094D7 /* LoginViewController.swift */,
+				8BE3D1771FAF1EB200474084 /* LoginViewController.swift */,
 				8B5636641FAE1B0C002094D7 /* MessagesViewController.swift */,
 				8B5636651FAE1B0C002094D7 /* MineViewController.swift */,
 				8B5636661FAE1B0C002094D7 /* RegisterViewController.swift */,
@@ -401,6 +401,7 @@
 				8B5636691FAE1B0C002094D7 /* DiscoveryViewController.swift in Sources */,
 				1220E0F21FAC0CD0000C0DC5 /* HUDHelper.swift in Sources */,
 				8BE3D1761FAF146A00474084 /* UIImage+Extension.swift in Sources */,
+				8BE3D1781FAF1EB200474084 /* LoginViewController.swift in Sources */,
 				1220E0F61FAC43C2000C0DC5 /* GGError.swift in Sources */,
 				12EBB2671FAD5AD900858F75 /* MBProgressHUD+Extension.m in Sources */,
 				8B5636721FAE1B3D002094D7 /* GGRequest.swift in Sources */,
@@ -410,7 +411,6 @@
 				12F6E6581FA807820011CE03 /* AppDelegate.swift in Sources */,
 				8B56366E1FAE1B0C002094D7 /* RegisterViewController.swift in Sources */,
 				8B5636671FAE1B0C002094D7 /* TopicTableViewCell.swift in Sources */,
-				8B56366B1FAE1B0C002094D7 /* LoginViewController.swift in Sources */,
 				8B56366A1FAE1B0C002094D7 /* HomeViewController.swift in Sources */,
 				8B56366D1FAE1B0C002094D7 /* MineViewController.swift in Sources */,
 			);
