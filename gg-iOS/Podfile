@@ -1,0 +1,32 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '8.0'
+
+target 'gg-iOS' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for gg-iOS
+  pod 'Reveal-iOS-SDK', '= 1.6.2'
+  pod 'Alamofire', '~> 4.5.1'
+  pod 'Kanna', '~> 2.1.0'
+  pod 'SnapKit', '~> 4.0.0'
+  pod 'RxCocoa'
+  pod 'MBProgressHUD', :git => 'https://github.com/jdg/MBProgressHUD.git', :commit => 'ddd6a2150212d0f41b264616d82577116562814f'
+  pod 'ObjectMapper', '~> 3.0.0'
+  pod 'Kingfisher', '~> 4.2.0'
+  
+  post_install do |installer|
+      installer.pods_project.targets.each do |target|
+          swift3_projects = ['Kanna']
+          if swift3_projects.include? target.name
+              target.build_configurations.each do |config|
+                  config.build_settings['SWIFT_VERSION'] = '3.2'
+              end
+          end
+      end
+      installer.pods_project.build_configuration_list.build_configurations.each do |config|
+          config.build_settings['COCOAPODS_PARALLEL_CODE_SIGN'] = config.name == 'Debug'
+      end
+  end
+
+end
