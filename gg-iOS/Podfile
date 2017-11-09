@@ -6,7 +6,7 @@ target 'gg-iOS' do
   use_frameworks!
 
   # Pods for gg-iOS
-  pod 'Reveal-iOS-SDK', '= 1.6.2'
+  # pod 'Reveal-iOS-SDK', '= 1.6.2'
   pod 'Alamofire', '~> 4.5.1'
   pod 'Kanna', '~> 2.1.0'
   pod 'SnapKit', '~> 4.0.0'

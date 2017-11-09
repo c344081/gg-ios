@@ -59,7 +59,7 @@ class HUDHelper: MBProgressHUD {
     /// - Returns: hud实例
     @discardableResult
     public class func showWithRemoveFlag(_ removeFromSuperViewOnHide: Bool) -> HUDHelper {
-        return self.show(with: nil, should: removeFromSuperViewOnHide)
+        return self.show(with: nil, removeFromSuperViewOnHide: removeFromSuperViewOnHide)
     }
     
     /// 同步等待返回
@@ -68,7 +68,7 @@ class HUDHelper: MBProgressHUD {
     /// - Returns: HUD实例
     @discardableResult
     public class func show(with status: String?) -> HUDHelper {
-        return self.show(with: status, should: true)
+        return self.show(with: status, removeFromSuperViewOnHide: true)
     }
     
     /// 只适用于以下情形(均为同步,显示在窗口上),其他情况灵活使用
@@ -115,19 +115,17 @@ class HUDHelper: MBProgressHUD {
     ///   - view: 要操作的视图
     ///   - animated: 是否需要动画
     /// - Returns: 计数
-    public class func hideAll(for view: UIView, _ animated: Bool) -> Int {
+    public class func hideAll(for view: UIView, animated: Bool) -> Int {
         var huds = [HUDHelper]()
         let subviews = view.subviews
-        for aView in subviews {
-            if aView.isKind(of: self) {
-                let aHud = aView as! HUDHelper
-                huds.append(aHud)
-                aHud.removeFromSuperViewOnHide = true
-                if animated {
-                    aHud.hideAfterRecommendDuration()
-                } else {
-                    aHud.hide(animated: animated)
-                }
+        for aView in subviews where aView is HUDHelper {
+            let aHud = aView as! HUDHelper
+            huds.append(aHud)
+            aHud.removeFromSuperViewOnHide = true
+            if animated {
+                aHud.hideAfterRecommendDuration()
+            } else {
+                aHud.hide(animated: animated)
             }
         }
         return huds.count
@@ -182,26 +180,17 @@ class HUDHelper: MBProgressHUD {
     // MARK: - getter
     
     static var infoImage: UIImage = {
-        var image: UIImage!;
-        if image == nil {
-            image = customImage("info")
-        }
+        let image = customImage("info")
         return image
     }()
     
     static var successImage: UIImage = {
-        var image: UIImage!;
-        if image == nil {
-            image = customImage("success")
-        }
+        let image = customImage("success")
         return image
     }()
     
     static var errorImage: UIImage = {
-        var image: UIImage!;
-        if image == nil {
-            image = customImage("error")
-        }
+        let image = customImage("error")
         return image
     }()
 }
@@ -214,9 +203,9 @@ extension HUDHelper {
     }
     
     @discardableResult
-    private static func show(with status: String?, should removefromSuperViewOnHide: Bool) -> HUDHelper {
+    private static func show(with status: String?, removeFromSuperViewOnHide: Bool) -> HUDHelper {
         let hud = self.defaultHud()
-        hud.removeFromSuperViewOnHide = removefromSuperViewOnHide
+        hud.removeFromSuperViewOnHide = removeFromSuperViewOnHide
         hud.detailsLabel.text = status
         return hud
     }

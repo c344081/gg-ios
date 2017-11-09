@@ -23,7 +23,6 @@ class LoginViewController: UIViewController {
     
     let disposebag = DisposeBag()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
@@ -96,11 +95,11 @@ class LoginViewController: UIViewController {
         
         // MARK: - sign in
         signInButton.rx.controlEvent(.touchUpInside)
-            .flatMap{ (_) -> Observable<AnyObject> in
+            .flatMap{ (_) -> Observable<Any> in
                 if let cookies = HTTPCookieStorage.shared.cookies(for: URL(string: "http://www.baidu.com")!) {
                     for cookie in cookies {
                         if cookie.name == "_xsrf" {
-                            return Observable.just(cookie.value as AnyObject)
+                            return Observable.just(cookie.value)
                         }
                     }
                 }
@@ -113,21 +112,21 @@ class LoginViewController: UIViewController {
                                 let doc = HTML(html: html, encoding: .utf8),
                                 let xsrf = doc.xpath("//input[@name='_xsrf']").first?["value"]
                             {
-                                observer.onNext(xsrf as AnyObject)
+                                observer.onNext(xsrf)
                                 
                             } else {
-                                observer.onNext(RxCocoaError.unknown as AnyObject)
+                                observer.onNext(RxCocoaError.unknown)
                             }
                         case .failure:
-                            observer.onNext(response.error as AnyObject)
+                            observer.onNext(response.error!)
                         }
                     }
                     return Disposables.create()
-                }).catchError({ (e) -> Observable<AnyObject> in
-                    return Observable.just(e as AnyObject)
+                }).catchError({ (e) -> Observable<Any> in
+                    return Observable.just(e)
                 })
             }
-            .flatMap({ (xsrf) -> Observable<AnyObject> in
+            .flatMap({ (xsrf) -> Observable<Any> in
                 return Observable.create({ observer in
                     Alamofire.request("http://www.guanggoo.com/login",
                                       method: .post,
@@ -138,17 +137,17 @@ class LoginViewController: UIViewController {
                         switch response.result {
                         case .success:
                             if let data = response.data, let html = String(data: data, encoding: .utf8) {
-                                observer.onNext(html as AnyObject)
+                                observer.onNext(html)
                             } else {
-                                observer.onNext(RxCocoaError.unknown as AnyObject)
+                                observer.onNext(RxCocoaError.unknown)
                             }
                         case .failure:
-                            observer.onNext(response.error as AnyObject)
+                            observer.onNext(response.error!)
                         }
                     }
                     return Disposables.create()
-                }).catchError({ (e) -> Observable<AnyObject> in
-                    return Observable.just(e as AnyObject)
+                }).catchError({ (e) -> Observable<Any> in
+                    return Observable.just(e)
                 })
             })
             .subscribe(onNext: { htmldoc in

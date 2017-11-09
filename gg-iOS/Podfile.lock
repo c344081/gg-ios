@@ -4,7 +4,6 @@ PODS:
   - Kingfisher (4.2.0)
   - MBProgressHUD (1.0.0)
   - ObjectMapper (3.0.0)
-  - Reveal-iOS-SDK (1.6.2)
   - RxCocoa (4.0.0):
     - RxSwift (~> 4.0)
   - RxSwift (4.0.0)
@@ -16,7 +15,6 @@ DEPENDENCIES:
   - Kingfisher (~> 4.2.0)
   - MBProgressHUD (from `https://github.com/jdg/MBProgressHUD.git`, commit `ddd6a2150212d0f41b264616d82577116562814f`)
   - ObjectMapper (~> 3.0.0)
-  - Reveal-iOS-SDK (= 1.6.2)
   - RxCocoa
   - SnapKit (~> 4.0.0)
 
@@ -36,11 +34,10 @@ SPEC CHECKSUMS:
   Kingfisher: 9ee7e788d8ba07c3f21ce0d43f33cec310a4f781
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   ObjectMapper: 92230db59bf8f341a5c3a3cf0b9fbdde3cf0d87f
-  Reveal-iOS-SDK: e2250b3c155bcfac53ae223ddc1f76d08f206c33
   RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
   RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: 31d2a4dde708e148e563bbf13698dee9e21b55a9
+PODFILE CHECKSUM: 12550944a4b9036447a1e3a46a1e538b7b2d88fa
 
 COCOAPODS: 1.3.1
