@@ -13,6 +13,7 @@
 		1220E0F61FAC43C2000C0DC5 /* GGError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1220E0F51FAC43C2000C0DC5 /* GGError.swift */; };
 		12EBB2671FAD5AD900858F75 /* MBProgressHUD+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EBB2661FAD5AD900858F75 /* MBProgressHUD+Extension.m */; };
 		12EBB26E1FAD67A500858F75 /* GGFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EBB26D1FAD67A500858F75 /* GGFunctions.swift */; };
+		12ECF9B01FB3FC960059C5AD /* APIProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ECF9AF1FB3FC960059C5AD /* APIProxy.swift */; };
 		12F6E6581FA807820011CE03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6E6571FA807820011CE03 /* AppDelegate.swift */; };
 		12F6E65F1FA807820011CE03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F6E65E1FA807820011CE03 /* Assets.xcassets */; };
 		12F6E6621FA807820011CE03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F6E6601FA807820011CE03 /* LaunchScreen.storyboard */; };
@@ -40,6 +41,7 @@
 		12EBB2651FAD5AD900858F75 /* MBProgressHUD+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Extension.h"; sourceTree = "<group>"; };
 		12EBB2661FAD5AD900858F75 /* MBProgressHUD+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Extension.m"; sourceTree = "<group>"; };
 		12EBB26D1FAD67A500858F75 /* GGFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGFunctions.swift; sourceTree = "<group>"; };
+		12ECF9AF1FB3FC960059C5AD /* APIProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProxy.swift; sourceTree = "<group>"; };
 		12F6E6541FA807820011CE03 /* gg-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gg-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F6E6571FA807820011CE03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F6E65E1FA807820011CE03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5636711FAE1B3D002094D7 /* GGRequest.swift */,
+				12ECF9AF1FB3FC960059C5AD /* APIProxy.swift */,
 			);
 			path = networking;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				12EBB26E1FAD67A500858F75 /* GGFunctions.swift in Sources */,
 				12F6E6881FA8258D0011CE03 /* GGNavigationController.swift in Sources */,
 				8B5636701FAE1B2D002094D7 /* Post.swift in Sources */,
+				12ECF9B01FB3FC960059C5AD /* APIProxy.swift in Sources */,
 				8B5636691FAE1B0C002094D7 /* DiscoveryViewController.swift in Sources */,
 				1220E0F21FAC0CD0000C0DC5 /* HUDHelper.swift in Sources */,
 				8BE3D1761FAF146A00474084 /* UIImage+Extension.swift in Sources */,

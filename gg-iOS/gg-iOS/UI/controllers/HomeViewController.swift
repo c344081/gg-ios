@@ -41,6 +41,11 @@ class HomeViewController: UIViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
+        HUDHelper.showInfo(with: "123")
+        DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1.0) {
+            HUDHelper.showInfo(with: "456")
+        }
     }
     
     func loadData() {
