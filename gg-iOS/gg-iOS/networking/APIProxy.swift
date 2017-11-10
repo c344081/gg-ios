@@ -12,70 +12,86 @@ import Alamofire
 
 class APIProxy {
     
-    lazy var requestCache = [String: Alamofire.Request]()
-    
     let semaphore = DispatchSemaphore(value: 1)
     
     static var shared: APIProxy  = {
         return APIProxy()
     }()
     
-    public func start(request: GGRequest) -> GGRequest {
+    public func start(_ request: GGRequest, responseQueue: DispatchQueue) {
         let manager = self.config(request:request)
         
-        let url = URL(string: request.path, relativeTo: URL(string: request.baseUrl)!)!
+        let url = URL(string: request.path(), relativeTo: URL(string: request.baseUrl())!)!
         
         var argumentsM = [String: Any]()
         
         // verify arguments
-        if let verfyArguments = request.verifyArgument, verfyArguments.count > 0 {
-            verfyArguments.forEach { argumentsM[$0] = $1 }
+        if let verifyArguments = request.verifyArgument(), verifyArguments.count > 0 {
+            verifyArguments.forEach { argumentsM[$0] = $1 }
         }
         
         // query arguments
-        if let parameters = request.parameters, parameters.count > 0  {
+        if let parameters = request.parameters(), parameters.count > 0  {
             parameters.forEach { argumentsM[$0] = $1 }
         }
         
-        var internalRequest: Alamofire.Request?
+        var internalRequest: Alamofire.Request!
         switch request.requestType {
         case .Data:
-            internalRequest = manager.request(url, method: request.method, parameters: argumentsM, headers: request.customHTTPHeaderFields)
+            internalRequest = manager.request(url, method: request.method(), parameters: argumentsM, headers: request.customHTTPHeaderFields())
         case .Download:
-            internalRequest = nil
+            internalRequest = manager.download(url, headers: request.customHTTPHeaderFields())
         case .Upload:
-            internalRequest = nil
+            internalRequest = manager.upload(Data(), to: url, headers: request.customHTTPHeaderFields())
         case .Stream:
-            internalRequest = nil
-        default:
-            fatalError("unknown request type")
+            fatalError("暂未支持")
         }
         
-        self.addRequest(internalRequest!)
+        // start request
+        internalRequest.resume()
         
-        return request
+        // response
+        let completionHandler: (Any) -> Void = { [unowned request] (dataResponse) in
+            if let completion = request.completion {
+                completion(dataResponse)
+                request.completion = nil
+            }
+        }
+        switch request.requestType {
+            
+            
+        case .Data, .Upload, .Stream:
+            let dataRequest = internalRequest as! DataRequest
+            switch request.responseType {
+            case .RawData:
+                dataRequest.responseData(queue: responseQueue, completionHandler: completionHandler)
+            case .JSON:
+                dataRequest.responseJSON(queue: responseQueue, options: .mutableContainers, completionHandler: completionHandler)
+            }
+        case .Download:
+            let downloadRequest = internalRequest as! DownloadRequest
+            switch request.responseType {
+            case .RawData:
+                downloadRequest.responseData(queue: responseQueue, completionHandler: completionHandler)
+            case .JSON:
+                downloadRequest.responseJSON(queue: responseQueue, options: .mutableContainers, completionHandler: completionHandler)
+            }
+        }
     }
     
     func config(request: GGRequest) -> Alamofire.SessionManager {
         var manager = request.manager
         if manager == nil {
-            let config = URLSessionConfiguration()
+            let config = URLSessionConfiguration.default
+            config.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
             if let timeoutInterval = request.timeoutInterval, timeoutInterval > 0 {
                 config.timeoutIntervalForRequest = timeoutInterval
             }
             manager = Alamofire.SessionManager(configuration: config)
-            manager!.adapter = Adapter()
+            manager?.startRequestsImmediately = false
             request.manager = manager
         }
         return manager!
-    }
-    
-    func hashKey(for task: Alamofire.Request) -> String {
-        return ""
-    }
-    
-    func addRequest(_ request: Alamofire.Request) {
-        
     }
     
 }

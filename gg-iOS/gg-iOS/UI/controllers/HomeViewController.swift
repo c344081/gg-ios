@@ -17,6 +17,8 @@ class HomeViewController: UIViewController {
     /// topic模型数组
     lazy var items = [Topic]()
     lazy var heightCache = NSCache<NSString, NSNumber>()
+    
+    var homeApi: HomeApi?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,18 +46,15 @@ class HomeViewController: UIViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-        HUDHelper.showInfo(with: "123")
-        DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1.0) {
-            HUDHelper.showInfo(with: "456")
-        }
     }
     
     func loadData() {
-        Alamofire.request("http://www.guanggoo.com/").responseData { [unowned self] (response) in
-            switch response.result {
+        homeApi = HomeApi()
+        homeApi?.start(completion: { [unowned self] (response) in
+            let x = response as! DataResponse<Data>
+            switch x.result {
             case .success:
-                if let data = response.data,
+                if let data = x.data,
                     let html = String(data: data, encoding: .utf8),
                     let doc = HTML(html: html, encoding: .utf8) {
                     let itemNodes = doc.xpath("//div[@class='topic-item']")
@@ -83,9 +82,9 @@ class HomeViewController: UIViewController {
                     self.tableView.reloadData()
                 }
             case .failure:
-                HUDHelper.showError(with: response.error!.localizedDescription)
+                HUDHelper.showError(with: x.error!.localizedDescription)
             }
-        }
+        })
     }
 
 }
