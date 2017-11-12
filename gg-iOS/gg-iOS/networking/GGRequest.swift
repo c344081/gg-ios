@@ -24,57 +24,114 @@ enum GGResponseSerializerType {
     case JSON
 }
 
-class GGRequest {
+protocol GGRequestible {
     
-    func baseUrl() -> String { return "" }
-    /// 路径
-    func path() -> String { return "" }
-    /// 请求方式
-    func method() -> GGRequestMethod { return .get }
-    /// 参数
-    func parameters() -> [String : Any]? { return nil }
-    /// 用于服务器校验的通用参数
-    func verifyArgument() -> [String : Any]? { return nil }
-    /// 自定义的Http头部
-    func customHTTPHeaderFields() -> [String: String]? { return nil }
-    /// 使用自定义的`URLRequest`
-    func customUrlRequest() -> URLRequest? { return nil }
-    /// 超时时间
-    var timeoutInterval: TimeInterval?
+    associatedtype ResponseItem
+
+    var baseUrl: String { get }
+    var path: String { get }
+    var method: GGRequestMethod { get }
+    var parameters: [String : Any]? { get }
+    var verifyArgument: [String : Any]? { get }
+    var customHTTPHeaderFields: [String: String]? { get }
+    var timeoutInterval: TimeInterval { get set }
+
+    var urlRequest: URLRequest? { get }
+    var dataTask: URLSessionTask? { get }
+    var requestType: GGRequestType { get }
+    var responseType: GGResponseSerializerType { get }
+    var manager: Alamofire.SessionManager? { get set }
+    /// 完成后的回调
+    var completion: ((ResponseItem) -> Void)? { get set }
+    
+    mutating func config(request: Self) -> Alamofire.SessionManager
+    
+    func start(validators: [Any]?, responseQueue: DispatchQueue, completion: @escaping (_ response: ResponseItem) -> Void)
+    
+}
+
+extension GGRequestible {
+    var baseUrl: String {
+        return ""
+    }
+    var path: String {
+        return ""
+    }
+    var method: GGRequestMethod {
+        return .get
+    }
+    var parameters: [String: Any]? {
+        return nil
+    }
+    var verifyArgument: [String: Any]? {
+        return nil
+    }
+    var customHTTPHeaderFields: [String: String]? {
+        return nil
+    }
+
+    var urlRequest: URLRequest? {
+        return nil
+    }
+    var dataTask: URLSessionTask? {
+        return nil
+    }
+}
+
+
+class GGRequest<Value>: GGRequestible {
+    
+    typealias GGNetworkCompletion = (DataResponse<Value>) -> Void
+  
+    var timeoutInterval: TimeInterval = 60
     
     var manager: Alamofire.SessionManager?
-    
-    var dataTask: URLSessionTask?
-    
-    // 完成后的回调
-    var completion: ((Any) -> Void)?
-    
-    // 对status code等进行额外校验
-    var validators: [Any]?
-    
     /// Alamofire用于链式调用的request对象
-    fileprivate var dataRequest: DataRequest?
-    
+    var dataRequest: DataRequest?
+
+    /// 完成后的回调
+    var completion: GGNetworkCompletion?
+
+    /// 对status code等进行额外校验
+    var validators: [Any]?
+
     var requestType: GGRequestType {
         return .Data
     }
-    
+
     var responseType: GGResponseSerializerType {
         return .JSON
     }
-    
-    init(timeoutInterval: TimeInterval? = nil) {
-        self.timeoutInterval = timeoutInterval
+
+    init(timeoutInterval: TimeInterval) {
+        if timeoutInterval > 0 {
+            self.timeoutInterval = timeoutInterval
+        }
     }
-    
+
     deinit {
         self.cancel()
     }
     
-    public func start(validators: [Any]? = nil, responseQueue: DispatchQueue = .main, completion: @escaping (_ response: Any) -> Void) {
+    func config(request: GGRequest<Value>) -> SessionManager {
+        var manager = request.manager
+        if manager == nil {
+            let config = URLSessionConfiguration.default
+            config.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+            if request.timeoutInterval > 0 {
+                config.timeoutIntervalForRequest = request.timeoutInterval
+            }
+            manager = Alamofire.SessionManager(configuration: config)
+            manager?.startRequestsImmediately = false
+            request.manager = manager
+        }
+        return manager!
+    }
+
+    public func start(validators: [Any]? = nil, responseQueue: DispatchQueue = .main, completion: @escaping GGNetworkCompletion) {
         self.completion = completion
         self.validators = validators
-        APIProxy.shared.start(self, responseQueue: responseQueue)
+//        APIProxy.shared.start(self, responseQueue: responseQueue)
     }
     
     public func cancel() {
@@ -84,58 +141,54 @@ class GGRequest {
     }
     
     fileprivate func cancelTask() {
-        if let dataTask = dataRequest?.task,
+        if let dataTask = dataTask,
             dataTask.state != .canceling,
             dataTask.state != .completed {
             dataTask.cancel()
         }
     }
-    
-    fileprivate func config(_ request: GGRequest) -> Alamofire.SessionManager {
-        var manager = request.manager
-        if manager == nil {
-            let config = URLSessionConfiguration()
-            if let timeoutInterval = request.timeoutInterval, timeoutInterval > 0 {
-                config.timeoutIntervalForRequest = timeoutInterval
-            }
-            manager = Alamofire.SessionManager(configuration: config)
-            manager!.adapter = Adapter()
-            request.manager = manager
-        }
-        return manager!
-    }
+
 }
 
-
-/// 下载请求
-/// - Note: 没写完
-class GGDownloadRequest: GGRequest {
+class GGDataRequest: GGRequest<Data> {
     override var requestType: GGRequestType {
-        return .Download
+        return .Data
     }
     override var responseType: GGResponseSerializerType {
         return .RawData
     }
 }
 
-/// 上传请求
-/// - Note: 没写完
-class GGUploadRequest: GGRequest {
-    override var requestType: GGRequestType {
-        return .Upload
-    }
-    override var responseType: GGResponseSerializerType {
-        return .RawData
-    }
-}
+///// 下载请求
+///// - Note: 没写完
+//class GGDownloadRequest: GGRequest {
+//    override var requestType: GGRequestType {
+//        return .Download
+//    }
+//    override var responseType: GGResponseSerializerType {
+//        return .RawData
+//    }
+//}
+//
+///// 上传请求
+///// - Note: 没写完
+//class GGUploadRequest: GGRequest {
+//    override var requestType: GGRequestType {
+//        return .Upload
+//    }
+//    override var responseType: GGResponseSerializerType {
+//        return .RawData
+//    }
+//}
+//
+///// stream请求
+///// - Note: 没写完
+//class GGStreamRequest: GGRequest {
+//    override var requestType: GGRequestType {
+//        return .Stream
+//    }
+//    override var responseType: GGResponseSerializerType {
+//        return .RawData
+//    }
+//}
 
-/// stream请求
-/// - Note: 没写完
-class GGStreamRequest: GGRequest {
-    override var requestType: GGRequestType {
-        return .Stream
-    }
-    override var responseType: GGResponseSerializerType {
-        return .RawData
-    }
-}

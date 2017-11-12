@@ -1,17 +1,18 @@
+////
+////  HomeApi.swift
+////  gg-iOS
+////
+////  Created by zoxuner on 2017/11/10.
+////  Copyright © 2017年 c344081. All rights reserved.
+////
 //
-//  HomeApi.swift
-//  gg-iOS
+//import UIKit
+//import Alamofire
 //
-//  Created by zoxuner on 2017/11/10.
-//  Copyright © 2017年 c344081. All rights reserved.
-//
+//class HomeApi: GGBaseRequest {
+//    override func path() -> String {
+//        return "/"
+//    }
+// 
+//}
 
-import UIKit
-import Alamofire
-
-class HomeApi: GGBaseRequest {
-    override func path() -> String {
-        return "/"
-    }
- 
-}

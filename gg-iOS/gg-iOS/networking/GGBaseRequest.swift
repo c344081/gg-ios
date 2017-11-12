@@ -9,11 +9,12 @@
 import UIKit
 import Alamofire
 
-class GGBaseRequest: GGRequest {
-    override func baseUrl() -> String {
+class GGBaseRequest: GGRequest<Data> {
+    var baseUrl: String {
         return "http://www.guanggoo.com/"
     }
     override var responseType: GGResponseSerializerType {
         return .RawData
     }
 }
+
