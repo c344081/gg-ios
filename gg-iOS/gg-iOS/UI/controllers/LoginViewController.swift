@@ -89,6 +89,10 @@ class LoginViewController: UIViewController {
     // MARK: - private
     
     func initialize() {
+        Observable<Int>.create { (observer) -> Disposable in
+            observer.onNext(3)
+            return Disposables.create()
+        }
         Observable.combineLatest(nameField.rx.text, passwordField.rx.text) { (name, password) in
             return name!.count > 0 && password!.count > 0
         }.bind(to: signInButton.rx.isEnabled).disposed(by: disposebag)

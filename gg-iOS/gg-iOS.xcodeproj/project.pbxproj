@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		056DEF0932F1A507EB3B2E14 /* Pods_gg_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0DF651395359958CF79DBB6 /* Pods_gg_iOS.framework */; };
+		121D7B461FBAD42100A459D8 /* DataRequest+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121D7B451FBAD42100A459D8 /* DataRequest+Extension.swift */; };
 		1220E0F21FAC0CD0000C0DC5 /* HUDHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1220E0F11FAC0CD0000C0DC5 /* HUDHelper.swift */; };
 		1220E0F41FAC3CB9000C0DC5 /* HUDHelper.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1220E0F31FAC3CB9000C0DC5 /* HUDHelper.bundle */; };
 		1220E0F61FAC43C2000C0DC5 /* GGError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1220E0F51FAC43C2000C0DC5 /* GGError.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		121D7B451FBAD42100A459D8 /* DataRequest+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataRequest+Extension.swift"; sourceTree = "<group>"; };
 		1220E0F11FAC0CD0000C0DC5 /* HUDHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDHelper.swift; sourceTree = "<group>"; };
 		1220E0F31FAC3CB9000C0DC5 /* HUDHelper.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HUDHelper.bundle; sourceTree = "<group>"; };
 		1220E0F51FAC43C2000C0DC5 /* GGError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGError.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5636711FAE1B3D002094D7 /* GGRequest.swift */,
+				121D7B451FBAD42100A459D8 /* DataRequest+Extension.swift */,
 				12ECF9AF1FB3FC960059C5AD /* APIProxy.swift */,
 				12BBA6681FB590E600F44DBA /* GGBaseRequest.swift */,
 				12BBA66A1FB5956400F44DBA /* HomeApi.swift */,
@@ -411,6 +414,7 @@
 				8B5636691FAE1B0C002094D7 /* DiscoveryViewController.swift in Sources */,
 				1220E0F21FAC0CD0000C0DC5 /* HUDHelper.swift in Sources */,
 				8BE3D1761FAF146A00474084 /* UIImage+Extension.swift in Sources */,
+				121D7B461FBAD42100A459D8 /* DataRequest+Extension.swift in Sources */,
 				8BE3D1781FAF1EB200474084 /* LoginViewController.swift in Sources */,
 				1220E0F61FAC43C2000C0DC5 /* GGError.swift in Sources */,
 				12EBB2671FAD5AD900858F75 /* MBProgressHUD+Extension.m in Sources */,

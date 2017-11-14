@@ -8,26 +8,13 @@
 
 import UIKit
 import Alamofire
+import ObjectMapper
 
 /// 请求方法
 typealias GGRequestMethod = Alamofire.HTTPMethod
 
-enum GGRequestType {
-    case Data
-    case Download
-    case Upload
-    case Stream
-}
-
-enum GGResponseSerializerType {
-    case RawData
-    case JSON
-}
-
-protocol GGRequestible {
+protocol GGRequestConvertible {
     
-    associatedtype ResponseItem
-
     var baseUrl: String { get }
     var path: String { get }
     var method: GGRequestMethod { get }
@@ -37,29 +24,32 @@ protocol GGRequestible {
     var timeoutInterval: TimeInterval { get set }
 
     var urlRequest: URLRequest? { get }
-    var dataTask: URLSessionTask? { get }
-    var requestType: GGRequestType { get }
-    var responseType: GGResponseSerializerType { get }
-    var manager: Alamofire.SessionManager? { get set }
-    /// 完成后的回调
-    var completion: ((ResponseItem) -> Void)? { get set }
-    
-    mutating func config(request: Self) -> Alamofire.SessionManager
-    
-    func start(validators: [Any]?, responseQueue: DispatchQueue, completion: @escaping (_ response: ResponseItem) -> Void)
-    
 }
 
-extension GGRequestible {
+protocol GGRequestable {
+    var manager: Alamofire.SessionManager? { get set }
+    var dataTask: URLSessionTask? { get set }
+    var internalRequest: Alamofire.Request? { get set }
+    
+    func start<T: DataResponseSerializerProtocol>(queue: DispatchQueue?, responseSerializer: T, completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void)
+    
+    func cancel()
+}
+
+class GGRequest: GGRequestConvertible, GGRequestable {
+    
     var baseUrl: String {
         return ""
     }
+    
     var path: String {
         return ""
     }
+    
     var method: GGRequestMethod {
         return .get
     }
+    
     var parameters: [String: Any]? {
         return nil
     }
@@ -69,126 +59,109 @@ extension GGRequestible {
     var customHTTPHeaderFields: [String: String]? {
         return nil
     }
-
+    
     var urlRequest: URLRequest? {
         return nil
     }
-    var dataTask: URLSessionTask? {
-        return nil
-    }
-}
-
-
-class GGRequest<Value>: GGRequestible {
     
-    typealias GGNetworkCompletion = (DataResponse<Value>) -> Void
-  
-    var timeoutInterval: TimeInterval = 60
+    var timeoutInterval: TimeInterval
     
     var manager: Alamofire.SessionManager?
-    /// Alamofire用于链式调用的request对象
-    var dataRequest: DataRequest?
-
-    /// 完成后的回调
-    var completion: GGNetworkCompletion?
-
-    /// 对status code等进行额外校验
-    var validators: [Any]?
-
-    var requestType: GGRequestType {
-        return .Data
+    
+    var dataTask: URLSessionTask?
+    
+    var internalRequest: Request?
+    
+    init(timeoutInterval: TimeInterval = 60) {
+        self.timeoutInterval = timeoutInterval
     }
-
-    var responseType: GGResponseSerializerType {
-        return .JSON
-    }
-
-    init(timeoutInterval: TimeInterval) {
-        if timeoutInterval > 0 {
-            self.timeoutInterval = timeoutInterval
-        }
-    }
-
+    
     deinit {
-        self.cancel()
+        print(".....")
     }
     
-    func config(request: GGRequest<Value>) -> SessionManager {
-        var manager = request.manager
-        if manager == nil {
-            let config = URLSessionConfiguration.default
-            config.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-            if request.timeoutInterval > 0 {
-                config.timeoutIntervalForRequest = request.timeoutInterval
-            }
-            manager = Alamofire.SessionManager(configuration: config)
-            manager?.startRequestsImmediately = false
-            request.manager = manager
-        }
-        return manager!
-    }
-
-    public func start(validators: [Any]? = nil, responseQueue: DispatchQueue = .main, completion: @escaping GGNetworkCompletion) {
-        self.completion = completion
-        self.validators = validators
-//        APIProxy.shared.start(self, responseQueue: responseQueue)
+    func start<T: DataResponseSerializerProtocol>(queue: DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void) {
+        APIProxy.shared.start(request: self, responseQueue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
     }
     
-    public func cancel() {
-        // 移除回调
-        self.completion = nil
-        self.cancelTask()
-    }
-    
-    fileprivate func cancelTask() {
-        if let dataTask = dataTask,
-            dataTask.state != .canceling,
-            dataTask.state != .completed {
-            dataTask.cancel()
-        }
-    }
-
-}
-
-class GGDataRequest: GGRequest<Data> {
-    override var requestType: GGRequestType {
-        return .Data
-    }
-    override var responseType: GGResponseSerializerType {
-        return .RawData
+    func cancel() {
+        internalRequest?.cancel()
     }
 }
 
-///// 下载请求
-///// - Note: 没写完
-//class GGDownloadRequest: GGRequest {
-//    override var requestType: GGRequestType {
-//        return .Download
-//    }
-//    override var responseType: GGResponseSerializerType {
-//        return .RawData
-//    }
-//}
-//
-///// 上传请求
-///// - Note: 没写完
-//class GGUploadRequest: GGRequest {
-//    override var requestType: GGRequestType {
-//        return .Upload
-//    }
-//    override var responseType: GGResponseSerializerType {
-//        return .RawData
-//    }
-//}
-//
-///// stream请求
-///// - Note: 没写完
-//class GGStreamRequest: GGRequest {
-//    override var requestType: GGRequestType {
-//        return .Stream
-//    }
-//    override var responseType: GGResponseSerializerType {
-//        return .RawData
-//    }
-//}
+class GGDataRequest: GGRequest {
+    
+    private var dataRequest: Alamofire.DataRequest?
+    override var internalRequest: Alamofire.Request? {
+        set {
+            dataRequest = newValue as? Alamofire.DataRequest
+        }
+        get {
+            return dataRequest
+        }
+    }
+    
+}
 
+class GGDownloadRequest: GGRequest {
+    
+    private var downloadRequest: Alamofire.DownloadRequest?
+    override var internalRequest: Alamofire.Request? {
+        set {
+            downloadRequest = newValue as? Alamofire.DownloadRequest
+        }
+        get {
+            return downloadRequest
+        }
+    }
+    
+//    func request() -> Alamofire.DownloadRequest? {
+//        return APIProxy.shared.start(request: self, responseQueue: DispatchQueue.main)
+//    }
+
+}
+
+class GGUploadRequest: GGDataRequest {
+    
+    override var method: GGRequestMethod {
+        return .post
+    }
+    
+    var uploadRequest: Alamofire.UploadRequest?
+    override var internalRequest: Alamofire.Request? {
+        set {
+            uploadRequest = newValue as? Alamofire.UploadRequest
+        }
+        get {
+            return uploadRequest
+        }
+    }
+    
+//    override func request() -> Alamofire.UploadRequest? {
+//        return APIProxy.shared.start(request: self, responseQueue: DispatchQueue.main)
+//    }
+//
+}
+
+@available(iOS 9.0, *)
+class GGStreamRequest: GGDataRequest {
+    typealias RequestItem = StreamRequest
+    override var method: GGRequestMethod {
+        return .get
+    }
+    
+    var streamRequest: Alamofire.StreamRequest?
+    override var internalRequest: Alamofire.Request? {
+        set {
+            streamRequest = newValue as? Alamofire.StreamRequest
+        }
+        get {
+            return streamRequest
+        }
+    }
+    
+//    override func request() -> Alamofire.StreamRequest? {
+//        return APIProxy.shared.start(request: self, responseQueue: DispatchQueue.main)
+//    }
+
+}
