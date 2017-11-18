@@ -13,6 +13,18 @@ import ObjectMapper
 /// 请求方法
 typealias GGRequestMethod = Alamofire.HTTPMethod
 
+protocol GGRequestTypeable {
+    /// 包含的数据类型
+    associatedtype DataType
+    
+    /// 发起请求的泛型版
+    ///
+    /// - Parameters:
+    ///   - queue: 响应的队列
+    ///   - completion: 完成后的回调
+    func startRequest(queue: DispatchQueue?, with completion: @escaping (Error?, DataType?) -> Void)
+}
+
 protocol GGRequestConvertible {
     
     var baseUrl: String { get }
@@ -22,18 +34,23 @@ protocol GGRequestConvertible {
     var verifyArgument: [String : Any]? { get }
     var customHTTPHeaderFields: [String: String]? { get }
     var timeoutInterval: TimeInterval { get set }
-
-    var urlRequest: URLRequest? { get }
+    var customurlRequest: URLRequest? { get }
 }
 
 protocol GGRequestable {
     var manager: Alamofire.SessionManager? { get set }
-    var dataTask: URLSessionTask? { get set }
     var internalRequest: Alamofire.Request? { get set }
     
-    func start<T: DataResponseSerializerProtocol>(queue: DispatchQueue?, responseSerializer: T, completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void)
+    func start<T>(queue: DispatchQueue?, responseSerializer: T, completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void) where T: DataResponseSerializerProtocol
     
+    /// 取消请求
     func cancel()
+}
+
+extension GGRequestable {
+    func start<T>(queue: DispatchQueue?, responseSerializer: T, completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void) where T: DataResponseSerializerProtocol {
+        fatalError("请实现相应方法后调用:\(#function)")
+    }
 }
 
 class GGRequest: GGRequestConvertible, GGRequestable {
@@ -41,50 +58,50 @@ class GGRequest: GGRequestConvertible, GGRequestable {
     var baseUrl: String {
         return ""
     }
-    
+    /// 路径
     var path: String {
         return ""
     }
-    
+    /// 请求方式
     var method: GGRequestMethod {
         return .get
     }
-    
+    /// 参数
     var parameters: [String: Any]? {
         return nil
     }
+    /// 用于服务器校验的通用参数
     var verifyArgument: [String: Any]? {
         return nil
     }
+    /// 自定义的HTTP头部
     var customHTTPHeaderFields: [String: String]? {
         return nil
     }
-    
-    var urlRequest: URLRequest? {
+    /// 自定义的请求
+    var customurlRequest: URLRequest? {
         return nil
     }
-    
+    /// 请求的超时时间, 默认为60
     var timeoutInterval: TimeInterval
-    
+    /// urlsession 管理对象
     var manager: Alamofire.SessionManager?
-    
-    var dataTask: URLSessionTask?
-    
+    /// Alamofire中的请求对象
     var internalRequest: Request?
+    /// 用于避免提前结束时的回调
+    fileprivate var sentinel: OSAtomic_int64_aligned64_t = 0
     
     init(timeoutInterval: TimeInterval = 60) {
         self.timeoutInterval = timeoutInterval
     }
     
     deinit {
-        print(".....")
-    }
-    
-    func start<T: DataResponseSerializerProtocol>(queue: DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void) {
-        APIProxy.shared.start(request: self, responseQueue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
+        cancel()
     }
     
     func cancel() {
+        // increase
+        OSAtomicIncrement64(&sentinel)
         internalRequest?.cancel()
     }
 }
@@ -101,6 +118,31 @@ class GGDataRequest: GGRequest {
         }
     }
     
+    func start<T>(
+        queue: DispatchQueue? = nil,
+        responseSerializer: T,
+        completionHandler: @escaping (DataResponse<T.SerializedObject>) -> Void)
+        where T: DataResponseSerializerProtocol
+    {
+        // increase first
+        OSAtomicIncrement64(&sentinel)
+        let currentValue = self.sentinel
+        let canceledClosure: () -> Bool = { [weak self] () -> Bool in
+            var canceled = true
+            if let strongSelf = self {
+                canceled = strongSelf.sentinel != currentValue
+            }
+            return canceled
+        }
+        
+        APIProxy.shared.start(
+            request: self,
+            responseQueue: queue,
+            responseSerializer: responseSerializer,
+            completionHandler: completionHandler,
+            canceled: canceledClosure)
+    }
+    
 }
 
 class GGDownloadRequest: GGRequest {
@@ -115,10 +157,6 @@ class GGDownloadRequest: GGRequest {
         }
     }
     
-//    func request() -> Alamofire.DownloadRequest? {
-//        return APIProxy.shared.start(request: self, responseQueue: DispatchQueue.main)
-//    }
-
 }
 
 class GGUploadRequest: GGDataRequest {
@@ -136,11 +174,7 @@ class GGUploadRequest: GGDataRequest {
             return uploadRequest
         }
     }
-    
-//    override func request() -> Alamofire.UploadRequest? {
-//        return APIProxy.shared.start(request: self, responseQueue: DispatchQueue.main)
-//    }
-//
+
 }
 
 @available(iOS 9.0, *)
@@ -160,8 +194,4 @@ class GGStreamRequest: GGDataRequest {
         }
     }
     
-//    override func request() -> Alamofire.StreamRequest? {
-//        return APIProxy.shared.start(request: self, responseQueue: DispatchQueue.main)
-//    }
-
 }

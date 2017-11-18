@@ -8,8 +8,6 @@
 
 import UIKit
 import SnapKit
-import Alamofire
-import Kanna
 
 class HomeViewController: UIViewController {
     
@@ -18,7 +16,7 @@ class HomeViewController: UIViewController {
     lazy var items = [Topic]()
     lazy var heightCache = NSCache<NSString, NSNumber>()
     
-    var homeApi: HomeApi?
+    lazy var homeApi: HomeApi = HomeApi()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,43 +47,17 @@ class HomeViewController: UIViewController {
     }
     
     func loadData() {
-        homeApi = HomeApi()
-        
-        homeApi?.start(completion: { [unowned self] (response) in
-
-            switch response.result {
-            case .success:
-                if let data = response.data,
-                    let html = String(data: data, encoding: .utf8),
-                    let doc = HTML(html: html, encoding: .utf8) {
-                    let itemNodes = doc.xpath("//div[@class='topic-item']")
-                    for itemNode in itemNodes {
-                        let topic = Topic()
-                        topic.title = itemNode.xpath(".//*[@class='title']/a").first?.text
-                        let nodeDoc = itemNode.xpath(".//*[@class='node']/a").first
-                        topic.node = nodeDoc?["href"]?.replacingOccurrences(of: "/node/", with: "", options: .caseInsensitive)
-                        topic.nodeName = nodeDoc?.text
-                        let titleRef = itemNode.xpath(".//*[@class='title']/a").first?["href"]
-                        let idRange = titleRef?.range(of: "(?<=/)([\\d]*?)(?=#)", options: .regularExpression)
-                        if let idRange = idRange, let topicId = titleRef?[idRange] {
-                            topic.topicId = String(topicId)
-                        }
-                        topic.userName = itemNode.xpath(".//*[@class='username']/a").first?.text
-                        topic.avatar = itemNode.xpath(".//*[@class='avatar']").first?["src"]
-                        topic.lastTouchedTime = itemNode.xpath(".//*[@class='last-touched']").first?.text
-                        let lastReplyUserName = itemNode.xpath(".//*[@class='last-reply-username']/a").first?["href"]
-                        topic.lastReplyUserName = lastReplyUserName?.replacingOccurrences(of: "/u/", with: "", options: .caseInsensitive)
-                        topic.replyNum = Int(itemNode.xpath(".//*[@class='count']/a").first?.text ?? "0")
-                        
-                        self.items.append(topic)
-                    }
-                    
-                    self.tableView.reloadData()
-                }
-            case .failure:
-                HUDHelper.showError(with: response.error!.localizedDescription)
+        homeApi.startRequest { [weak self] (error, topics) in
+            guard let strongSelf = self else { return }
+            guard error == nil else {
+                return
             }
-        })
+            guard let topics = topics else {
+                return
+            }
+            strongSelf.items.append(contentsOf: topics)
+            strongSelf.tableView.reloadData()
+        }
     }
 
 }

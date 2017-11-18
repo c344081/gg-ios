@@ -8,8 +8,8 @@
 
 import UIKit
 
-class Topic: NSObject {
-    
+class Topic {
+   
     /// 头像
     public var avatar: String?
     /// 节点

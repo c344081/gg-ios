@@ -8,12 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		056DEF0932F1A507EB3B2E14 /* Pods_gg_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0DF651395359958CF79DBB6 /* Pods_gg_iOS.framework */; };
-		121D7B461FBAD42100A459D8 /* DataRequest+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121D7B451FBAD42100A459D8 /* DataRequest+Extension.swift */; };
 		1220E0F21FAC0CD0000C0DC5 /* HUDHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1220E0F11FAC0CD0000C0DC5 /* HUDHelper.swift */; };
 		1220E0F41FAC3CB9000C0DC5 /* HUDHelper.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1220E0F31FAC3CB9000C0DC5 /* HUDHelper.bundle */; };
 		1220E0F61FAC43C2000C0DC5 /* GGError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1220E0F51FAC43C2000C0DC5 /* GGError.swift */; };
-		12BBA6691FB590E600F44DBA /* GGBaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BBA6681FB590E600F44DBA /* GGBaseRequest.swift */; };
-		12BBA66B1FB5956400F44DBA /* HomeApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BBA66A1FB5956400F44DBA /* HomeApi.swift */; };
+		12472FBB1FBBE64F001EAAD5 /* GGBaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12472FB91FBBE64F001EAAD5 /* GGBaseRequest.swift */; };
+		12472FBC1FBBE64F001EAAD5 /* HomeApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12472FBA1FBBE64F001EAAD5 /* HomeApi.swift */; };
 		12EBB2671FAD5AD900858F75 /* MBProgressHUD+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EBB2661FAD5AD900858F75 /* MBProgressHUD+Extension.m */; };
 		12EBB26E1FAD67A500858F75 /* GGFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EBB26D1FAD67A500858F75 /* GGFunctions.swift */; };
 		12ECF9B01FB3FC960059C5AD /* APIProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ECF9AF1FB3FC960059C5AD /* APIProxy.swift */; };
@@ -38,12 +37,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		121D7B451FBAD42100A459D8 /* DataRequest+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataRequest+Extension.swift"; sourceTree = "<group>"; };
 		1220E0F11FAC0CD0000C0DC5 /* HUDHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDHelper.swift; sourceTree = "<group>"; };
 		1220E0F31FAC3CB9000C0DC5 /* HUDHelper.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HUDHelper.bundle; sourceTree = "<group>"; };
 		1220E0F51FAC43C2000C0DC5 /* GGError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGError.swift; sourceTree = "<group>"; };
-		12BBA6681FB590E600F44DBA /* GGBaseRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGBaseRequest.swift; sourceTree = "<group>"; };
-		12BBA66A1FB5956400F44DBA /* HomeApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeApi.swift; sourceTree = "<group>"; };
+		12472FB91FBBE64F001EAAD5 /* GGBaseRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GGBaseRequest.swift; sourceTree = "<group>"; };
+		12472FBA1FBBE64F001EAAD5 /* HomeApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeApi.swift; sourceTree = "<group>"; };
 		12EBB2651FAD5AD900858F75 /* MBProgressHUD+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Extension.h"; sourceTree = "<group>"; };
 		12EBB2661FAD5AD900858F75 /* MBProgressHUD+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Extension.m"; sourceTree = "<group>"; };
 		12EBB26D1FAD67A500858F75 /* GGFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGFunctions.swift; sourceTree = "<group>"; };
@@ -98,14 +96,35 @@
 			path = HUDHelper;
 			sourceTree = "<group>";
 		};
+		12472FB61FBBDE00001EAAD5 /* library */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = library;
+			sourceTree = "<group>";
+		};
+		12472FB71FBBDE00001EAAD5 /* vender */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = vender;
+			sourceTree = "<group>";
+		};
+		12472FB81FBBE64F001EAAD5 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				12472FB91FBBE64F001EAAD5 /* GGBaseRequest.swift */,
+				12472FBA1FBBE64F001EAAD5 /* HomeApi.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		1286BFAE1FAAB193005F3F06 /* networking */ = {
 			isa = PBXGroup;
 			children = (
+				12472FB81FBBE64F001EAAD5 /* API */,
 				8B5636711FAE1B3D002094D7 /* GGRequest.swift */,
-				121D7B451FBAD42100A459D8 /* DataRequest+Extension.swift */,
 				12ECF9AF1FB3FC960059C5AD /* APIProxy.swift */,
-				12BBA6681FB590E600F44DBA /* GGBaseRequest.swift */,
-				12BBA66A1FB5956400F44DBA /* HomeApi.swift */,
 			);
 			path = networking;
 			sourceTree = "<group>";
@@ -133,8 +152,9 @@
 			children = (
 				12F6E69A1FA86B2D0011CE03 /* UI */,
 				1286BFAE1FAAB193005F3F06 /* networking */,
-				12F6E66A1FA81FDC0011CE03 /* library */,
 				8BE3D1721FAF083200474084 /* extensions */,
+				12472FB61FBBDE00001EAAD5 /* library */,
+				12472FB71FBBDE00001EAAD5 /* vender */,
 				12F6E66C1FA81FDC0011CE03 /* utils */,
 				12F6E6971FA860E10011CE03 /* defines */,
 				12F6E66B1FA81FDC0011CE03 /* others */,
@@ -147,13 +167,6 @@
 				12F6E6631FA807820011CE03 /* Info.plist */,
 			);
 			path = "gg-iOS";
-			sourceTree = "<group>";
-		};
-		12F6E66A1FA81FDC0011CE03 /* library */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = library;
 			sourceTree = "<group>";
 		};
 		12F6E66B1FA81FDC0011CE03 /* others */ = {
@@ -374,6 +387,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-gg-iOS/Pods-gg-iOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/Kanna/Kanna.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
@@ -385,6 +399,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kanna.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
@@ -414,13 +429,13 @@
 				8B5636691FAE1B0C002094D7 /* DiscoveryViewController.swift in Sources */,
 				1220E0F21FAC0CD0000C0DC5 /* HUDHelper.swift in Sources */,
 				8BE3D1761FAF146A00474084 /* UIImage+Extension.swift in Sources */,
-				121D7B461FBAD42100A459D8 /* DataRequest+Extension.swift in Sources */,
 				8BE3D1781FAF1EB200474084 /* LoginViewController.swift in Sources */,
 				1220E0F61FAC43C2000C0DC5 /* GGError.swift in Sources */,
 				12EBB2671FAD5AD900858F75 /* MBProgressHUD+Extension.m in Sources */,
-				12BBA6691FB590E600F44DBA /* GGBaseRequest.swift in Sources */,
 				8B5636721FAE1B3D002094D7 /* GGRequest.swift in Sources */,
+				12472FBB1FBBE64F001EAAD5 /* GGBaseRequest.swift in Sources */,
 				8B56366C1FAE1B0C002094D7 /* MessagesViewController.swift in Sources */,
+				12472FBC1FBBE64F001EAAD5 /* HomeApi.swift in Sources */,
 				12F6E6991FA860EE0011CE03 /* GGDefines.swift in Sources */,
 				8BE3D1741FAF085300474084 /* UIView+Extension.swift in Sources */,
 				12F6E6581FA807820011CE03 /* AppDelegate.swift in Sources */,
@@ -428,7 +443,6 @@
 				8B5636671FAE1B0C002094D7 /* TopicTableViewCell.swift in Sources */,
 				8B56366A1FAE1B0C002094D7 /* HomeViewController.swift in Sources */,
 				8B56366D1FAE1B0C002094D7 /* MineViewController.swift in Sources */,
-				12BBA66B1FB5956400F44DBA /* HomeApi.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
